@@ -17,11 +17,13 @@ class RecipesController {
     const ingredientsInsert = ingredients.map((ingredient) => {
       return {
         recipe_id,
-        ingredient
+        name: ingredient
       }
     })
 
     await knex('ingredients').insert(ingredientsInsert)
+
+    res.json()
   }
 }
 

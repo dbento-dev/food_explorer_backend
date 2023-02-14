@@ -1,7 +1,7 @@
 exports.up = (knex) =>
   knex.schema.createTable('recipes', (table) => {
     table.increments('id').primary()
-    table.string('image').notNullable()
+    table.string('image')
     table.string('name').notNullable()
     table.string('category').notNullable()
     table.string('ingredients').notNullable()
