@@ -3,7 +3,6 @@ const knex = require('../database/knex')
 class RecipesController {
   async create(req, res) {
     const { name, category, ingredients, price, description } = req.body
-    // const { user_id } = req.params
 
     const recipe_id = await knex('recipes').insert({
       name,
@@ -11,7 +10,6 @@ class RecipesController {
       // ingredients,
       price,
       description
-      // user_id
     })
 
     const ingredientsInsert = ingredients.map((ingredient) => {
@@ -49,9 +47,36 @@ class RecipesController {
   }
 
   async index(req, res) {
-    const recipes = await knex('recipes').orderBy('name')
+    const { name, ingredients } = req.query
 
-    return res.json(recipes)
+    let recipes
+
+    if (ingredients) {
+      recipes = await knex('ingredients')
+        .select(['recipes.id', 'recipes.name'])
+        .whereLike('ingredients.name', `%${ingredients}%`)
+        .innerJoin('recipes', 'recipes.id', 'ingredients.recipe_id')
+        .orderBy('recipes.id')
+    } else {
+      recipes = await knex('recipes')
+        .whereLike('name', `%${name}%`)
+        .orderBy('id')
+    }
+
+    const allIngredients = await knex('ingredients')
+
+    const recipesWithIngredients = recipes.map((recipe) => {
+      const recipeIngredients = allIngredients.filter(
+        (_recipe) => _recipe.recipe_id === recipe.id
+      )
+
+      return {
+        ...recipe,
+        ingredients: recipeIngredients
+      }
+    })
+
+    return res.json(recipesWithIngredients)
   }
 }
 
