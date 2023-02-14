@@ -6,5 +6,6 @@ const recipesController = new RecipesController()
 
 recipesRoutes.post('/', recipesController.create)
 recipesRoutes.get('/:id', recipesController.show)
+recipesRoutes.delete('/:id', recipesController.delete)
 
 module.exports = recipesRoutes
