@@ -1,0 +1,23 @@
+{
+  "name": "food-explore-backend",
+  "version": "1.0.0",
+  "description": "Api for food explore - Explorer Rocketseat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dbento-dev/food_explorer_backend.git"
+  },
+  "keywords": [],
+  "author": "David Bento",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dbento-dev/food_explorer_backend/issues"
+  },
+  "homepage": "https://github.com/dbento-dev/food_explorer_backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
