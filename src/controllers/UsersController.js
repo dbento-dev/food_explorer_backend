@@ -76,8 +76,8 @@ class UsersController {
     }
 
     await db.run(
-      'UPDATE users SET name = (?), email = (?), password = (?), updated_at = (?) WHERE id = (?)',
-      [user.name, user.email, user.password, new Date(), user.id]
+      `UPDATE users SET name = (?), email = (?), password = (?), updated_at = DATETIME('now') WHERE id = (?)`,
+      [user.name, user.email, user.password, user.id]
     )
 
     return res.status(200).json({ message: 'User updated successfully' })
