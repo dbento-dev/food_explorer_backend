@@ -3,15 +3,15 @@ const knex = require('../database/knex')
 class RecipesController {
   async create(req, res) {
     const { name, category, ingredients, price, description } = req.body
-    const { user_id } = req.params
+    // const { user_id } = req.params
 
     const recipe_id = await knex('recipes').insert({
       name,
       category,
-      ingredients,
+      // ingredients,
       price,
-      description,
-      user_id
+      description
+      // user_id
     })
 
     const ingredientsInsert = ingredients.map((ingredient) => {
@@ -24,6 +24,20 @@ class RecipesController {
     await knex('ingredients').insert(ingredientsInsert)
 
     res.json()
+  }
+
+  async show(req, res) {
+    const { id } = req.params
+    const recipe = await knex('recipes').where({ id }).first()
+
+    const ingredients = await knex('ingredients')
+      .where({ recipe_id: id })
+      .orderBy('name')
+
+    return res.json({
+      ...recipe,
+      ingredients
+    })
   }
 }
 

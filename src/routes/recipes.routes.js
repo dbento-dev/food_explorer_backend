@@ -4,6 +4,7 @@ const RecipesController = require('../controllers/RecipesController')
 
 const recipesController = new RecipesController()
 
-recipesRoutes.post('/:user_id', recipesController.create)
+recipesRoutes.post('/', recipesController.create)
+recipesRoutes.get('/:id', recipesController.show)
 
 module.exports = recipesRoutes
