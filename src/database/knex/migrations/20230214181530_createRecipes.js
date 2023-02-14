@@ -3,18 +3,15 @@ exports.up = (knex) =>
     table.increments('id').primary()
     table.string('image').notNullable()
     table.string('name').notNullable()
-    table
-      .integer('category_id')
-      .references('id')
-      .inTable('categories')
-      .onDelete('CASCADE')
-    table
-      .integer('ingredients_id')
-      .references('id')
-      .inTable('ingredients')
-      .onDelete('CASCADE')
+    table.string('category').notNullable()
+    table.string('ingredients').notNullable()
     table.float('price').notNullable()
     table.string('description').notNullable()
+    table
+      .integer('user_id')
+      .references('id')
+      .inTable('users')
+      .onDelete('CASCADE')
   })
 
 exports.down = (knex) => knex.schema.dropTable('recipes')
