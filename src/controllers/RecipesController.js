@@ -47,6 +47,12 @@ class RecipesController {
 
     return res.json()
   }
+
+  async index(req, res) {
+    const recipes = await knex('recipes').orderBy('name')
+
+    return res.json(recipes)
+  }
 }
 
 module.exports = RecipesController
