@@ -47,19 +47,28 @@ class RecipesController {
   }
 
   async index(req, res) {
-    const { name, ingredients } = req.query
+    const { filter } = req.query
 
-    let recipes
+    let recipes = []
 
-    if (ingredients) {
+    // filter by ingredients
+    if (filter) {
       recipes = await knex('ingredients')
         .select(['recipes.id', 'recipes.name'])
-        .whereLike('ingredients.name', `%${ingredients}%`)
+        .whereLike('ingredients.name', `%${filter}%`)
         .innerJoin('recipes', 'recipes.id', 'ingredients.recipe_id')
         .orderBy('recipes.id')
-    } else {
+    }
+    // filter by recipe name
+    if (filter && recipes.length === 0) {
       recipes = await knex('recipes')
-        .whereLike('name', `%${name}%`)
+        .whereLike('name', `%${filter}%`)
+        .orderBy('id')
+    }
+    // filter when there is no filter
+    if (!filter) {
+      recipes = await knex('recipes')
+        .whereLike('name', `%${filter}%`)
         .orderBy('id')
     }
 
