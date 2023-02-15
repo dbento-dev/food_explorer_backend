@@ -54,7 +54,7 @@ class RecipesController {
     // filter by ingredients
     if (filter) {
       recipes = await knex('ingredients')
-        .select(['recipes.id', 'recipes.name'])
+        // .select(['recipes.id', 'recipes.name'])
         .whereLike('ingredients.name', `%${filter}%`)
         .innerJoin('recipes', 'recipes.id', 'ingredients.recipe_id')
         .orderBy('recipes.id')
