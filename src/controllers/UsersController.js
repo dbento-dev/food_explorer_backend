@@ -35,12 +35,13 @@ class UsersController {
   }
 
   async update(req, res) {
-    const { id } = req.params
+    // const { id } = req.params
+    const user_id = req.user.id
     const { name, email, password, old_password } = req.body
 
     const db = await sqliteConnection()
 
-    const user = await db.get('SELECT * FROM users WHERE id = (?)', [id])
+    const user = await db.get('SELECT * FROM users WHERE id = (?)', [user_id])
 
     if (!user) {
       throw new AppError('User not found', 404)
@@ -77,7 +78,7 @@ class UsersController {
 
     await db.run(
       `UPDATE users SET name = (?), email = (?), password = (?), updated_at = DATETIME('now') WHERE id = (?)`,
-      [user.name, user.email, user.password, user.id]
+      [user.name, user.email, user.password, user_id]
     )
 
     return res.status(200).json({ message: 'User updated successfully' })
