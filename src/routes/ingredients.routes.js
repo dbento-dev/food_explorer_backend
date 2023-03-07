@@ -4,6 +4,12 @@ const IngredientsController = require('../controllers/IngredientsController')
 const ingredientsRoutes = Router()
 const ingredientsController = new IngredientsController()
 
-ingredientsRoutes.get('/:recipe_id', ingredientsController.index)
+const ensureAuthenticated = require('../middlewares/ensureAuthenticated')
+
+ingredientsRoutes.get(
+  '/:recipe_id',
+  ensureAuthenticated,
+  ingredientsController.index
+)
 
 module.exports = ingredientsRoutes
