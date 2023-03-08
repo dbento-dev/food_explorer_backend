@@ -1,4 +1,6 @@
 const knex = require('../database/knex')
+const DiskStorage = require('../providers/DiskStorage')
+const AppError = require('../utils/AppError')
 
 class RecipesController {
   async create(req, res) {
@@ -22,6 +24,36 @@ class RecipesController {
     await knex('ingredients').insert(ingredientsInsert)
 
     res.json()
+  }
+
+  async update(req, res) {
+    const { id } = req.params
+    const { name, category, price, description, image } = req.body
+
+    const imageFileName = req.file.filename
+    const diskStorage = new DiskStorage()
+
+    const recipe = await knex('recipes').where({ id }).first()
+
+    if (!recipe) {
+      throw new AppError('Recipe not found', 404)
+    }
+
+    if (recipe.image) {
+      await diskStorage.deleteFile(recipe.image)
+    }
+
+    const fileName = await diskStorage.saveFile(imageFileName)
+
+    recipe.image = fileName ?? recipe.image
+    recipe.name = name ?? recipe.name
+    recipe.category = category ?? recipe.category
+    recipe.price = price ?? recipe.price
+    recipe.description = description ?? recipe.description
+
+    await knex('recipes').update(recipe).where({ id })
+
+    return res.status(201).json({ message: 'Recipe updated successfully' })
   }
 
   async show(req, res) {

@@ -18,9 +18,6 @@ recipesRoutes.get('/:id', recipesController.show)
 recipesRoutes.delete('/:id', recipesController.delete)
 recipesRoutes.get('/', recipesController.index)
 
-recipesRoutes.patch('/avatar', upload.single('image'), (req, res) => {
-  console.log(req.file.filename)
-  res.json()
-})
+recipesRoutes.patch('/:id', upload.single('image'), recipesController.update)
 
 module.exports = recipesRoutes
