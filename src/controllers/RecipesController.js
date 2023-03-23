@@ -7,7 +7,7 @@ class RecipesController {
     const user_id = req.user.id
     const { name, category, ingredients, price, description } = req.body
 
-    const recipe_id = await knex('recipes').insert({
+    const [recipe_id] = await knex('recipes').insert({
       name,
       category,
       price,
