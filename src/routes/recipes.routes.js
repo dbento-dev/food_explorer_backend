@@ -13,7 +13,7 @@ const upload = multer(uploadConfig.MULTER)
 
 recipesRoutes.use(ensureAuthenticated)
 
-recipesRoutes.post('/', recipesController.create)
+recipesRoutes.post('/', upload.single('image'), recipesController.create)
 recipesRoutes.get('/:id', recipesController.show)
 recipesRoutes.delete('/:id', recipesController.delete)
 recipesRoutes.get('/', recipesController.index)
