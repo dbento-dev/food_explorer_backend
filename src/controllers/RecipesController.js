@@ -96,6 +96,7 @@ class RecipesController {
         // .select(['recipes.id', 'recipes.name'])
         .whereLike('ingredients.name', `%${filter}%`)
         .innerJoin('recipes', 'recipes.id', 'ingredients.recipe_id')
+        .groupBy('recipes.id')
         .orderBy('recipes.id')
     }
     // filter by recipe name
