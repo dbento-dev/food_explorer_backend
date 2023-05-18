@@ -20,14 +20,25 @@ class RecipesController {
       description
     })
 
-    const ingredientsInsert = ingredients.map((ingredient) => {
-      return {
-        recipe_id,
-        name: ingredient
-      }
-    })
+    const hasOnlyOneIngredient = typeof ingredients === 'string'
 
-    await knex('ingredients').insert(ingredientsInsert)
+    let ingredientsToInsert
+
+    if (hasOnlyOneIngredient) {
+      ingredientsToInsert = {
+        recipe_id,
+        name: ingredients
+      }
+    } else {
+      ingredientsToInsert = ingredients.map((ingredient) => {
+        return {
+          recipe_id,
+          name: ingredient
+        }
+      })
+    }
+
+    await knex('ingredients').insert(ingredientsToInsert)
 
     return res.status(201).json({ message: 'Prato criado com sucesso!' })
   }
