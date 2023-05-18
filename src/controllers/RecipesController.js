@@ -94,7 +94,7 @@ class RecipesController {
 
     await knex('recipes').where({ id }).delete()
 
-    return res.json()
+    return res.json('Receita excluída com sucesso!')
   }
 
   async index(req, res) {
