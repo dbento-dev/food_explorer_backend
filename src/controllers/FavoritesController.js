@@ -5,6 +5,17 @@ class FavoritesController {
   async create(req, res) {
     const { user_id, recipe_id } = req.body
 
+    const [user] = await knex('users').where({ id: user_id })
+    const [recipe] = await knex('recipes').where({ id: recipe_id })
+
+    if (!user) {
+      throw new AppError('Usuário não encontrado!', 404)
+    }
+
+    if (!recipe) {
+      throw new AppError('Prato não encontrado!', 404)
+    }
+
     const [favoriteExists] = await knex('favorites').where({
       user_id,
       recipe_id
