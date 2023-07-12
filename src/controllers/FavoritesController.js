@@ -3,7 +3,8 @@ const AppError = require('../utils/AppError')
 
 class FavoritesController {
   async create(req, res) {
-    const { user_id, recipe_id } = req.body
+    const user_id = req.user.id
+    const { recipe_id } = req.body
 
     const [user] = await knex('users').where({ id: user_id })
     const [recipe] = await knex('recipes').where({ id: recipe_id })
@@ -34,21 +35,31 @@ class FavoritesController {
   }
 
   async delete(req, res) {
-    const { id } = req.body
+    const user_id = req.user.id
+    const { id } = req.params
 
-    const [favorites] = await knex('favorites').where({ id })
+    const [favorites] = await knex('favorites').where({
+      user_id,
+      recipe_id: id
+    })
 
     if (!favorites) {
       throw new AppError('Prato favorito não foi encontrado!', 404)
     }
 
-    await knex('favorites').where({ id }).delete()
+    const favorite_id = favorites.id
+
+    await knex('favorites').where({ id: favorite_id }).delete()
 
     return res.status(201).json({ message: 'Removido dos favoritos!' })
   }
 
   async index(req, res) {
-    const { user_id } = req.body
+    const user_id = req.user.id
+
+    if (!user_id) {
+      throw new AppError('Usuário não encontrado!', 404)
+    }
 
     let favorites = []
 
