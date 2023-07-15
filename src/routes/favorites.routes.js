@@ -11,6 +11,6 @@ favoritesRoutes.use(ensureAuthenticated)
 
 favoritesRoutes.get('/', favoritesController.index)
 favoritesRoutes.post('/', favoritesController.create)
-favoritesRoutes.delete('/:id', favoritesController.delete)
+favoritesRoutes.delete('/', favoritesController.delete)
 
 module.exports = favoritesRoutes

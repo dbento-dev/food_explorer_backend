@@ -36,22 +36,26 @@ class FavoritesController {
 
   async delete(req, res) {
     const user_id = req.user.id
-    const { id } = req.params
+    const { favorite_id } = req.query
 
-    const [favorites] = await knex('favorites').where({
-      user_id,
-      recipe_id: id
-    })
-
-    if (!favorites) {
-      throw new AppError('Prato favorito não foi encontrado!', 404)
+    if (!user_id) {
+      throw new AppError('Usuário não encontrado!', 404)
     }
 
-    const favorite_id = favorites.id
+    const [favorite] = await knex('favorites').where({
+      user_id,
+      recipe_id: favorite_id
+    })
 
-    await knex('favorites').where({ id: favorite_id }).delete()
+    if (!favorite) {
+      return
+    }
 
-    return res.status(201).json({ message: 'Removido dos favoritos!' })
+    const { id } = favorite
+
+    await knex('favorites').where({ id }).delete()
+
+    return res.status(200).json({ message: 'Removido dos favoritos!' })
   }
 
   async index(req, res) {
@@ -73,8 +77,8 @@ class FavoritesController {
       )
 
       return {
-        ...favorite,
-        favoriteRecipeDetail: recipe
+        ...recipe[0],
+        ...favorite
       }
     })
 
