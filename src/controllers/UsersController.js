@@ -20,7 +20,7 @@ class UsersController {
     ])
 
     if (userExists) {
-      throw new AppError('User already exists', 400)
+      throw new AppError('Usuário ja existe!', 400)
     }
 
     const hashedPassword = await hash(password, 8)
@@ -31,7 +31,7 @@ class UsersController {
       hashedPassword
     ])
 
-    return res.status(201).json({ message: 'User created successfully' })
+    return res.status(201).json({ message: 'Usuário criado com sucesso!' })
   }
 
   async update(req, res) {
@@ -44,7 +44,7 @@ class UsersController {
     const user = await db.get('SELECT * FROM users WHERE id = (?)', [user_id])
 
     if (!user) {
-      throw new AppError('User not found', 404)
+      throw new AppError('Usuário não encontrado!', 404)
     }
 
     const userWithUpdatedEmail = await db.get(
@@ -53,7 +53,7 @@ class UsersController {
     )
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-      throw new AppError('Email already in use', 400)
+      throw new AppError('E-mail já existe', 400)
     }
 
     user.name = name ?? user.name
@@ -62,7 +62,7 @@ class UsersController {
 
     if (password && !old_password) {
       throw new AppError(
-        'You need to inform the old password to set a new password',
+        'Você precisa informar a senha antiga para alterar a senha',
         400
       )
     }
@@ -71,7 +71,7 @@ class UsersController {
       const checkOldPassword = await compare(old_password, user.password)
 
       if (!checkOldPassword) {
-        throw new AppError('Old password does not match', 400)
+        throw new AppError('Senha antiga incorreta!', 400)
       }
 
       user.password = await hash(password, 8)
@@ -82,7 +82,7 @@ class UsersController {
       [user.name, user.email, user.password, user.is_admin, user_id]
     )
 
-    return res.status(200).json({ message: 'User updated successfully' })
+    return res.status(200).json({ message: 'Usuário atualizado com sucesso!' })
   }
 }
 

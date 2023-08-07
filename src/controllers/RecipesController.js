@@ -4,13 +4,13 @@ const AppError = require('../utils/AppError')
 
 class RecipesController {
   async create(req, res) {
-    // const user_id = req.user.id
     const { name, category, ingredients, price, description } = req.body
-    const imageFileName = req.file.filename
+
+    const avatarFileName = req.file.filename
 
     const diskStorage = new DiskStorage()
 
-    const fileName = await diskStorage.saveFile(imageFileName)
+    const fileName = await diskStorage.saveFile(avatarFileName)
 
     const [recipe_id] = await knex('recipes').insert({
       image: fileName,
