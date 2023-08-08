@@ -12,7 +12,7 @@ class RecipeAvatarController {
     const recipe = await knex('recipes').where({ id }).first()
 
     if (!recipe) {
-      throw new AppError('Recipe not found', 404)
+      throw new AppError('Receita não encontrada!', 404)
     }
 
     if (recipe.image) {
@@ -24,8 +24,7 @@ class RecipeAvatarController {
 
     await knex('recipes').update(recipe).where({ id })
 
-    // return res.json(user)
-    return res.status(201).json({ message: 'Recipe updated successfully' })
+    return res.status(201).json({ message: 'Receita atualizada com sucesso!' })
   }
 }
 

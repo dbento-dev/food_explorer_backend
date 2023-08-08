@@ -50,7 +50,7 @@ class RecipesController {
     const recipe = await knex('recipes').where({ id }).first()
 
     if (!recipe) {
-      throw new AppError('Recipe not found', 404)
+      throw new AppError('Receita não encontrada!', 404)
     }
 
     recipe.name = name ?? recipe.name
@@ -83,7 +83,7 @@ class RecipesController {
       .where({ recipe_id: id })
       .insert(ingredientsToInsert)
 
-    return res.status(201).json({ message: 'Recipe updated successfully' })
+    return res.status(201).json({ message: 'Receita atualizada com sucesso!' })
   }
 
   async show(req, res) {
@@ -93,6 +93,10 @@ class RecipesController {
     const ingredients = await knex('ingredients')
       .where({ recipe_id: id })
       .orderBy('name')
+
+    if (!recipe) {
+      throw new AppError('Receita não encontrada!', 404)
+    }
 
     return res.json({
       ...recipe,
